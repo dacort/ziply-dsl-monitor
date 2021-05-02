@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Status - xDSL</title>
+        <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+        <link rel="icon" type="image/ico" href="/favi-ziply.ico" />
+
+	<link rel="stylesheet" type="text/css" href="/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="/baseres.css" />
+        <link rel="stylesheet" type="text/css" href="/ziply.css" />
+	<script src="/jquery.js"></script>
+	<script src="/bootstrap.js"></script>
+<meta http-equiv="refresh" content="10; URL=/cgi-bin/dslstatistics.ha" />
+<script type="text/css"><!--
+<style id="antiClickjack" type="text/css">body{display:none;}</style>
+//-->
+</script>
+
+<!-- d3 changed significantly from v3 to v4. Track versions in use.
+    Previously we used 3.5.5, 3.5.17, and 4.11.0.  Now we only use 4.11.0.
+    Note we also use a new d3v4 version of d3gauge in d3gaugev4.js
+    Before ship verify minified versions are in use.
+-->
+
+<script type="text/javascript">
+var refreshlockout;
+var seconds=0;
+function setlock(){
+    refreshlockout = 1;
+}
+function resetlock(){
+    refreshlockout = 0;
+}
+/*this is the AJAX update for banner refresh */
+function banner_refresh() {
+  if (refreshlockout == 0 && (seconds == 0 || seconds > 3)){
+    setlock();
+    $(document).ready(function(){
+        $.ajax({url: "/cgi-bin/bannerstate.ha", success: function(result){
+            $("#mybanner").html(result);
+        }});
+    });
+    //keep the lock for an extra 100ms
+    setTimeout("resetlock()", 100);
+  }
+}
+// * to ensure there is a graph_refresh function
+function graph_refresh() {
+    console.log("We have hit the fake graph_refresh function.");
+}
+function reloadGraph(){
+    // Refresh interval is 2000 msecs (2 seconds) by default, see above.
+    setInterval("graph_refresh()", 2000);
+}
+var bTimeout = 10000
+ var seconds=0
+ seconds=11
+var msgFormat = "Auto Refresh %%S%%";
+function countDown(){
+    seconds-=1;
+    msgArea = document.getElementById("secTime");
+    msg = msgFormat.replace(/%%S%%/g,seconds);
+    msgArea.innerHTML = msg;
+    if(seconds > 0)
+      setTimeout("countDown()",1000);
+}
+function setBannerWithDelay(){
+    setInterval("banner_refresh()", bTimeout);
+}
+
+function reloadBanner(){
+    if (bTimeout != 0) {
+        resetlock();
+        //delay the setting of this timer by 300ms so multiple timers don't go off at once
+        //and we are clear of the extra 100ms delay in the ajax code to reset the lock
+        setTimeout("setBannerWithDelay()", 300);
+    }
+}
+  adImages=new Array('/images/Block1.gif','/images/Block3.gif','/images/Block5.gif','/images/Block7.gif','/images/Block9.gif','/images/Block11.gif','/images/Block14.gif')
+  thisAd=0
+  imgCt=adImages.length
+if (self == top) {
+    var antiClickjack = document.getElementById("antiClickjack");
+    antiClickjack.parentNode.removeChild(antiClickjack);
+} else {
+    top.location = self.location;
+}
+  function rotate(){
+	if (document.images) {
+		thisAd++
+		if (thisAd==imgCt){
+			thisAd=0
+		}
+		var pbar = document.getElementById("adBanner");
+		pbar.src=adImages[thisAd]
+		setTimeout('rotate()',200)
+	}
+  }
+function getBootstrapDeviceSize() {
+  return $('#users-device-size').find('div:visible').first().attr('id');
+}
+</script>
+</head>
+        <body onload="reloadBanner();countDown();">
+
+  <div id="wrapper" class="container" style="overflow-x: hidden">
+    <div id="logoutbar" class="container-fluid">
+        <div id="version">NVG443B Version: 9.3.0</div>
+    </div>
+    <div id="whole-page" class="container-fluid">
+      <div id="main-content">
+        <div id="header">
+          <div id="tab-container">
+       <div id="logo-div" class = "container-fluid">
+         <img id="main-logo" src="/images/ziply_logo.png" alt="" />
+	 <div class = "col-sm-8 col-xs-12 col-sm-push-1"  style ="padding: 0px 0px">	         
+	  <div class="allpage-summary">
+	  <div id="mybanner" class="table-responsive">
+             <table class="table bare-table">
+	     <tr><td class="table33"><span class="col1">WAN Link:</span>&nbsp;
+<span class="respass">Up</span>
+             </td>
+             <td class="table33"><span class="col1">Link Type:</span>&nbsp;<span class="col2">ADSL2+ Bonded</span></td>
+             <td class="table33"><span class="col1">Link Speed:</span>&nbsp;<span class="col2">1234 / 123kbps</span></td>
+	     </tr>
+	     <tr>
+             <td><span class="col1">WAN Conn:</span>&nbsp;
+<span class="respass">Connected</span>
+             </td>
+             <td><span class="col1">Conn Type:</span>&nbsp;<span class="col2">
+PPP
+</span></td>
+             <td><span class="col1">WAN IP:</span>&nbsp;<span class="col2" style="word-break: break-all">
+8.8.8.8
+</span></td>
+		</tr>
+<tr><td><span class="col1">Wireless2G:</span>&nbsp;<span class="respass">Enabled</span></td>
+         <td><span class="col1">SSID:</span>&nbsp;<span class="col2" style="word-break: break-all">Frontier1492</span></td>
+         <td><span class="col1">Encryption:</span>&nbsp;<span id="enc11" class="col2">
+WPA2
+             </span></td>
+		</tr>
+      <tr>
+         <td><span class="col1">Wireless5G:</span>&nbsp;<span class="resfail">Disabled</span></td>
+             <td><span class="col1">Wifi EasyMesh&trade;: </span><span class="respass">Enabled
+                  </span></td>
+	  </tr>
+         </table>
+		</div>
+       </div>
+	</div>
+	 </div>
+            <div class="clear"></div>
+<div id="skip"><a href="#content-sub">Skip to Main Content</a></div>
+	  <nav class="navbar navbar-default" role="navigation">
+            <div id="top-navigation">
+		        <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+		    <div  style="padding-left:3px" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+
+
+<li><div class="topnav 
+"><a href="/cgi-bin/home.ha">Main</a></div></li>
+<li><div class="topnav 
+"><a href="/cgi-bin/wirestat.ha">Wireless</a></div></li>
+<li><div class="topnav 
+"><a href="/cgi-bin/devices.ha">Network</a></div></li>
+<li><div class="topnav 
+"><a href="/cgi-bin/firewall.ha">Firewall</a></div></li>
+<li><div class="topnav 
+"><a href="/cgi-bin/advwarn.ha">Advanced</a></div></li>
+<li><div class="topnav 
+topnavselected
+"><a href="/cgi-bin/status.ha">Status</a></div></li>
+
+		</ul>
+              <div style="clear: both;"></div>
+	 </div>
+	</div><!--top-navigation-->
+	</nav>
+
+                  </div><!--tab-container-->
+                <div style="clear: both;"></div>
+
+	<div class="col-md-2 col-xs-12 col-sm-4" style="padding: 0 0">
+          <div id="sec-navigation" style="margin: 3px 3px">
+            <div id="sec-navigation-buttons">
+<div class="sechead">Status</div>
+<div class="secnav 
+"><a href="/cgi-bin/status.ha">Summary</a></div>
+<div class="secnav 
+secnavselected
+"><a href="/cgi-bin/dslstatistics.ha">xDSL</a></div>
+<div class="secnav 
+"><a href="/cgi-bin/transport.ha">Transport</a></div>
+<div class="secnav 
+"><a href="/cgi-bin/connection.ha">Connection</a></div>
+<div class="secnav 
+"><a href="/cgi-bin/congraph.ha">Bandwidth Utilization</a></div>
+<div class="secnav 
+"><a href="/cgi-bin/lanstatistics.ha">LAN</a></div>
+<div class="secnav 
+"><a href="/cgi-bin/dhcpstat.ha">DHCP</a></div>
+<div class="secnav 
+"><a href="/cgi-bin/routing.ha">Routing</a></div>
+<div class="secnav 
+"><a href="/cgi-bin/arp.ha">ARP Table</a></div>
+<div class="secnav 
+"><a href="/cgi-bin/upnpstat.ha">UPnP</a></div>
+<div class="secnav 
+"><a href="/cgi-bin/nattable.ha">NAT</a></div>
+<div class="secnav 
+"><a href="/cgi-bin/hmapMesh.ha">Wireless Controller</a></div>
+<div class="secnav 
+"><a href="/cgi-bin/wlmonitor.ha">Wireless Control Monitor</a></div>
+<div class="secnav 
+"><a href="/cgi-bin/wifistat.ha">Wireless</a></div>
+<div class="secnav 
+"><a href="/cgi-bin/wscan.ha">Wireless Site Survey</a></div>
+<div class="secnav 
+"><a href="/cgi-bin/dpigraph.ha">Application Statistics</a></div>
+<div class="secnav 
+"><a href="/cgi-bin/sysinfo.ha">Gateway Resources</a></div>
+<div class="secnav 
+"><a href="/cgi-bin/logs.ha">Logs</a></div>
+<div class="secnav 
+"><a href="/cgi-bin/tsd.ha">Tech Support Info</a></div>
+                  </div></div><!--sec-navigation-->
+		  </div> <!--bootstrap-container-->
+	  <div class="col-md-8 col-sm-8 col-xs-12" style="padding: 0 0">
+          <div id="content-padding" style="padding: 3px 3px"><!-- CONTENT -->
+            <div id="content">
+	<div id="content-sub">
+                <div class="first-section-header">
+<div id="refresh-div"><div class="main-heading"><h1>Status - xDSL</h1></div>
+<div class="refresh">
+<input title="Auto Refresh" type="checkbox" name="frefresh" checked="checked" onclick="self.location.replace('http://192.168.254.254/cgi-bin/refsave.ha?/cgi-bin/dslstatistics.ha')" /><span id="secTime"> Auto Refresh
+10
+</span></div></div>
+</div>
+<form method="post" action="/cgi-bin/dslstatistics.ha">
+<input type="hidden" name="nonce" value="deadbeef" />
+          <div class="table-responsive">
+                 <table class="grid table100">
+                 <caption class="hidesmall">Table of Bonded DSL</caption>
+                 <tr><th>&nbsp;</th><th colspan="2">Line 1</th><th colspan="2">Line 2</th></tr>
+                   <tr class="b"><td class="col1">Mode:</td>
+                       <td class="col2" colspan="2">ADSL2+</td>
+                       <td class="col2" colspan="2">ADSL2+</td>
+                   </tr>
+                   <tr class="a"><td class="col1 table50">Transport Mode:</td>
+                       <td class="col2" colspan="2">PTM BOND</td>
+                       <td class="col2" colspan="2">PTM BOND</td>
+                   </tr>
+                   <tr class="a"><td class="col1">Status:</td>
+                       <td class="col2" colspan="2">Up</td>
+                       <td class="col2" colspan="2">Up</td>
+                   </tr>
+                   <tr class="a"><td class="col1">Uptime:</td>
+                       <td class="col2" colspan="2">00:00:02:26</td>
+                       <td class="col2" colspan="2">00:00:01:57</td>
+                   </tr>
+                   <tr class="a"><td class="col1">Link Power State:</td>
+                       <td class="col2" colspan="2">L0</td>
+                       <td class="col2" colspan="2">L0</td>
+                   </tr>
+                   <tr class="a"><td class="col1">CO Vendor ID:</td>
+                       <td class="col2" colspan="2">ABC123</td>
+                       <td class="col2" colspan="2">ABC234</td>
+                   </tr>
+                       <tr><th>&nbsp;</th>
+                           <th>Downstream </th>
+                           <th>Upstream </th>
+                           <th>Downstream </th>
+                           <th>Upstream </th>
+                       </tr>
+                   <tr class="b"><td class="col1">Rate (kbps):</td>
+                       <td class="col2">9567</td>
+                       <td class="col2">957</td>
+                       <td class="col2">9567</td>
+                       <td class="col2">957</td>
+                   </tr>
+                      <tr class="a"><td class="col1">SN Margin (dB):</td>
+                           <td class="col2"> 9.7</td>
+                           <td class="col2"> 9.1</td>
+                           <td class="col2">
+ 11.8
+</td>
+                           <td class="col2">
+ 11.2
+</td>
+                       </tr>
+                       <tr class="b"><td class="col1">Line Attenuation (dB):</td>
+                           <td class="col2"> 43.5</td>
+                           <td class="col2"> 25.6</td>
+                           <td class="col2">
+ 44.0
+</td>
+                           <td class="col2">
+ 25.8
+</td>
+                       </tr>
+                       <tr class="a"><td class="col1">Output Power(dBm):</td>
+                           <td class="col2"> 19.7</td>
+                           <td class="col2"> 12.6</td>
+                           <td class="col2"> 19.6</td>
+                           <td class="col2"> 12.6</td>
+                       </tr>
+                       <tr class="a"><td class="col1">Attainable Rate (kbps):</td>
+                           <td class="col2">11132</td>
+                           <td class="col2">1100</td>
+                           <td class="col2">11956</td>
+                           <td class="col2">1143</td>
+                       </tr>
+                       <tr class="a"><td class="col1">Trellis Coding:</td>
+                           <td class="col2">ON</td>
+                           <td class="col2">ON</td>
+                           <td class="col2">ON</td>
+                           <td class="col2">ON</td>
+                       <tr class="a"><td class="col1">Super Frames:</td>
+                           <td class="col2">8984</td>
+                           <td class="col2">8227</td>
+                           <td class="col2">7187</td>
+                           <td class="col2">6520</td>
+                       </tr>
+                       <tr class="a"><td class="col1">Super Frame Errors:</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                           <td class="col2">1</td>
+                           <td class="col2">0</td>
+                       </tr>
+                       <tr class="a"><td class="col1">RS Words:</td>
+                           <td class="col2">0</td>
+                           <td class="col2">592247</td>
+                           <td class="col2">0</td>
+                           <td class="col2">469390</td>
+                       </tr>
+                       <tr class="a"><td class="col1">RS Correctable Errors:</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                       </tr>
+                       <tr class="a"><td class="col1">RS Uncorrectable Errors:</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                       </tr>
+                       <tr class="a"><td class="col1">HEC Errors:</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                           <td class="col2">5</td>
+                           <td class="col2">0</td>
+                       </tr>
+                       <tr class="a"><td class="col1">OCD Errors:</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                       </tr>
+                       <tr class="a"><td class="col1">LCD Errors:</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                       </tr>
+                       <tr class="a"><td class="col1">Total Cells:</td>
+                           <td class="col2">2675988</td>
+                           <td class="col2">0</td>
+                           <td class="col2">2140776</td>
+                           <td class="col2">0</td>
+                       </tr>
+                       <tr class="a"><td class="col1">Data Cells:</td>
+                           <td class="col2">426109</td>
+                           <td class="col2">0</td>
+                           <td class="col2">425573</td>
+                           <td class="col2">0</td>
+                       </tr>
+                       <tr class="a"><td class="col1">Bit Errors:</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                       </tr>
+                       <tr class="a"><td class="col1">Total ES:</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                           <td class="col2">1</td>
+                           <td class="col2">0</td>
+                       </tr>
+                       <tr class="a"><td class="col1">Total SES:</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                       </tr>
+                       <tr class="a"><td class="col1">Total UAS:</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                           <td class="col2">0</td>
+                       </tr>
+                    </table>
+                    </div>
+              <div>
+                <table>
+                  <tr><td><input type="submit" name="Refresh" class="cssbtn btnspacer" value="Refresh" onclick="setlock();" />
+                  <input type="submit" name="DSLHistory" class="cssbtn largebtn btnspacer" value="Show Historical Stats" onclick="setlock();" />
+                  <input type="submit" name="Clear" class="cssbtn" value="Clear" onclick="setlock();" />
+                  </td></tr>
+                </table>
+              </div>
+            </form>
+                </div> <!-- content-sub-->
+                </div> <!-- content-->
+              </div><!--content-padding-->
+<!-- the HTML below is needed by getBootstrapDeviceSize //-->
+<div id="users-device-size">
+  <div id="xs" class="visible-xs"></div>
+  <div id="sm" class="visible-sm"></div>
+  <div id="md" class="visible-md"></div>
+  <div id="lg" class="visible-lg"></div>
+</div>
+		</div><!-- bootstrap container-->
+   <div>
+            <div class = "pull-right col-sm-3 col-md-2 col-xs-12" style ="padding: 0 0">
+            <div id="help" style = "padding: 3px 3px; text-align =center;">
+              <div id="help-sub">
+              <h2><a href="/cgi-bin/helptoggle.ha">Show Help</a></h2>
+              </div> <!-- help-sub -->
+            </div> <!-- help -->
+	</div>
+    </div>
+          </div><!--header-->
+        </div><!--main-content-->
+        <div style="clear: both;"></div>
+      </div><!--whole-page-->
+      <div id="footer">
+        <div class="inner"><p>&copy; 2020 CommScope, Inc. All rights reserved.</p></div>
+      </div><!--footer-->
+    </div><!--wrapper-->
+<script language="javascript" type="text/javascript"><!--
+if (getBootstrapDeviceSize() == "xs") {
+        window.location.hash = '#content-sub';
+}
+//-->
+</script>
+</body>
+</html>
