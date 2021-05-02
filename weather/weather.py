@@ -8,7 +8,7 @@ from prometheus_client import Gauge, Enum, start_http_server
 
 PIRATE_WEATHER_API_KEY = os.getenv("PIRATE_WEATHER_API_KEY")
 PIRATE_WEATHER_ENDPOINT = "https://api.pirateweather.net/forecast/"
-LAT_LONG = "xxx.y,-yyy.z"
+LAT_LONG = os.getenv("LAT_LONG")
 
 
 @dataclass
