@@ -7,6 +7,11 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
 
+# Raspberry builds require gcc
+RUN apt-get update \
+  && apt-get install gcc -y \
+  && apt-get clean
+
 # Install pip requirements
 COPY requirements.txt .
 RUN python -m pip install -r requirements.txt
